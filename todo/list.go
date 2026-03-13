@@ -31,7 +31,7 @@ func (l *List) GetTasks() map[string]Task {
 	defer l.mtx.RUnlock()
 
 	tmp := make(map[string]Task)
-	for k, v := range tmp {
+	for k, v := range l.tasks {
 		tmp[k] = v
 	}
 
