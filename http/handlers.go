@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 )
 
@@ -83,9 +84,15 @@ func (h HTTPHandlers) HandleDoneTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	title := mux.Vars(r)["title"]
+	idStr := mux.Vars(r)["id"]
 
-	changedTask, err := h.todoList.DoneTask(title)
+	id, err := uuid.Parse(idStr)
+	if err != nil {
+		http.Error(w, "invalid uuid", http.StatusBadRequest)
+		return
+	}
+
+	changedTask, err := h.todoList.DoneTask(id)
 	if err != nil {
 		errDTO := NewErrorDTO(err)
 
@@ -111,9 +118,14 @@ func (h HTTPHandlers) HandleDoneTask(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h HTTPHandlers) HandleDeleteTask(w http.ResponseWriter, r *http.Request) {
-	title := mux.Vars(r)["title"]
+	idStr := mux.Vars(r)["id"]
 
-	if err := h.todoList.DeleteTask(title); err != nil {
+	id, err := uuid.Parse(idStr)
+	if err != nil {
+		http.Error(w, "invalid uuid", http.StatusBadRequest)
+	}
+
+	if err := h.todoList.DeleteTask(id); err != nil {
 		errDTO := NewErrorDTO(err)
 
 		if errors.Is(err, todo.ErrTaskNotFound) {

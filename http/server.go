@@ -31,12 +31,12 @@ func (s HTTPServer) StartServer() error {
 		HandlerFunc(s.httpServer.HandleGetTasks)
 
 	router.
-		Path("/tasks/{title}").
+		Path("/tasks/{id}").
 		Methods(http.MethodPatch).
 		HandlerFunc(s.httpServer.HandleDoneTask)
 
 	router.
-		Path("/tasks/{title}").
+		Path("/tasks/{id}").
 		Methods(http.MethodDelete).
 		HandlerFunc(s.httpServer.HandleDeleteTask)
 
