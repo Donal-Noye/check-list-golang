@@ -59,7 +59,7 @@ func (h HTTPHandlers) HandleCreateTask(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h HTTPHandlers) HandleGetList(w http.ResponseWriter, r *http.Request) {
+func (h HTTPHandlers) HandleGetTasks(w http.ResponseWriter, r *http.Request) {
 	tasks := h.todoList.GetTasks()
 
 	b, err := json.MarshalIndent(tasks, "", "    ")
