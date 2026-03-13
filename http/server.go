@@ -17,28 +17,28 @@ func NewHTTPServer(httpHandlers *HTTPHandlers) *HTTPServer {
 	}
 }
 
-func (h HTTPHandlers) StartServer() error {
+func (s HTTPServer) StartServer() error {
 	router := mux.NewRouter()
 
 	router.
 		Path("/tasks").
-		Methods(http.MethodGet).
-		HandlerFunc(h.HandleCreateTask)
+		Methods(http.MethodPost).
+		HandlerFunc(s.httpServer.HandleCreateTask)
 
 	router.
 		Path("/tasks").
 		Methods(http.MethodGet).
-		HandlerFunc(h.HandleGetTasks)
+		HandlerFunc(s.httpServer.HandleGetTasks)
 
 	router.
 		Path("/tasks/{title}").
 		Methods(http.MethodPatch).
-		HandlerFunc(h.HandleDoneTask)
+		HandlerFunc(s.httpServer.HandleDoneTask)
 
 	router.
 		Path("/tasks/{title}").
 		Methods(http.MethodDelete).
-		HandlerFunc(h.HandleDeleteTask)
+		HandlerFunc(s.httpServer.HandleDeleteTask)
 
 	if err := http.ListenAndServe(":8080", router); err != nil {
 		if errors.Is(err, http.ErrServerClosed) {
