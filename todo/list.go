@@ -26,18 +26,30 @@ func (l *List) AddTask(task Task) error {
 	return nil
 }
 
-func (l *List) DoneTask(task Task) (Task, error) {
+func (l *List) GetTasks() map[string]Task {
+	l.mtx.RLock()
+	defer l.mtx.RUnlock()
+
+	tmp := make(map[string]Task)
+	for k, v := range tmp {
+		tmp[k] = v
+	}
+
+	return tmp
+}
+
+func (l *List) DoneTask(title string) (Task, error) {
 	l.mtx.Lock()
 	defer l.mtx.Unlock()
 
-	task, ok := l.tasks[task.Title]
+	task, ok := l.tasks[title]
 	if !ok {
 		return Task{}, ErrTaskNotFound
 	}
 
 	task.Done()
 
-	l.tasks[task.Title] = task
+	l.tasks[title] = task
 
 	return task, nil
 }
